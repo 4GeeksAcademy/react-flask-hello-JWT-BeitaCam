@@ -1,19 +1,44 @@
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import String, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
+
 class User(db.Model):
-    id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(120), unique=True, nullable=False)
-    password: Mapped[str] = mapped_column(nullable=False)
-    is_active: Mapped[bool] = mapped_column(Boolean(), nullable=False)
-
-
-    def serialize(self):
+    __tablename__ = 'users'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100))
+    email = db.Column(db.String(120), nullable=False, unique=True)
+    password = db.Column(db.String(180), nullable=False)
+    active = db.Column(db.Boolean(), default=True)
+    
+    def to_dict(self):
         return {
             "id": self.id,
+            "name": self.name,
             "email": self.email,
-            # do not serialize the password, its a security breach
+            "active": self.active
         }
+        
+    # 🔐 HASH PASSWORD
+    def hash_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    # 🔍 CHECK PASSWORD (NUEVO)
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+        
+    # 💾 SAVE
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+        
+    # 🔄 UPDATE
+    def update(self):
+        db.session.commit()
+    
+    # ❌ DELETE
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()

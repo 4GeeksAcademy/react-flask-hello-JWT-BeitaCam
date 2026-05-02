@@ -1,52 +1,43 @@
-import React, { useEffect } from "react"
-import rigoImageUrl from "../assets/img/rigo-baby.jpg";
+import React, { useEffect } from "react";
 import useGlobalReducer from "../hooks/useGlobalReducer.jsx";
 
 export const Home = () => {
 
-	const { store, dispatch } = useGlobalReducer()
+	const { store, dispatch } = useGlobalReducer();
 
-	const loadMessage = async () => {
-		try {
-			const backendUrl = import.meta.env.VITE_BACKEND_URL
+		const loadData = async () => {
+				try {
+							const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-			if (!backendUrl) throw new Error("VITE_BACKEND_URL is not defined in .env file")
+										const response = await fetch(backendUrl + "/api/users"); // 👈 cambia aquí
+													const data = await response.json();
 
-			const response = await fetch(backendUrl + "/api/hello")
-			const data = await response.json()
+																if (response.ok) {
+																				dispatch({ type: "set_users", payload: data.users });
+																							}
 
-			if (response.ok) dispatch({ type: "set_hello", payload: data.message })
+																									} catch (error) {
+																												console.log("Error conectando con backend:", error);
+																														}
+																															};
 
-			return data
+																																useEffect(() => {
+																																		loadData();
+																																			}, []);
 
-		} catch (error) {
-			if (error.message) throw new Error(
-				`Could not fetch the message from the backend.
-				Please check if the backend is running and the backend port is public.`
-			);
-		}
+																																				return (
+																																						<div className="text-center mt-5">
+																																									<h1>Conexión API 🚀</h1>
 
-	}
-
-	useEffect(() => {
-		loadMessage()
-	}, [])
-
-	return (
-		<div className="text-center mt-5">
-			<h1 className="display-4">Hello Rigo!!</h1>
-			<p className="lead">
-				<img src={rigoImageUrl} className="img-fluid rounded-circle mb-3" alt="Rigo Baby" />
-			</p>
-			<div className="alert alert-info">
-				{store.message ? (
-					<span>{store.message}</span>
-				) : (
-					<span className="text-danger">
-						Loading message from the backend (make sure your python 🐍 backend is running)...
-					</span>
-				)}
-			</div>
-		</div>
-	);
-}; 
+																																												<div className="alert alert-info mt-3">
+																																																{store.users ? (
+																																																					<span>API funcionando correctamente ✅</span>
+																																																									) : (
+																																																														<span className="text-danger">
+																																																																				No conecta con el backend ❌
+																																																																									</span>
+																																																																													)}
+																																																																																</div>
+																																																																																		</div>
+																																																																																			);
+																																																																																			};
