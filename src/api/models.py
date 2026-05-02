@@ -21,24 +21,24 @@ class User(db.Model):
             "active": self.active
         }
         
-    # 🔐 HASH PASSWORD
+    
     def hash_password(self, password):
         self.password = generate_password_hash(password)
     
-    # 🔍 CHECK PASSWORD (NUEVO)
+    
     def check_password(self, password):
         return check_password_hash(self.password, password)
         
-    # 💾 SAVE
+    
     def save(self):
         db.session.add(self)
         db.session.commit()
         
-    # 🔄 UPDATE
+    
     def update(self):
         db.session.commit()
     
-    # ❌ DELETE
+    
     def delete(self):
         db.session.delete(self)
         db.session.commit()

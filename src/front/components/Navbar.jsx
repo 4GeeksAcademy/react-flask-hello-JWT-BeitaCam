@@ -21,7 +21,7 @@ export const Navbar = () => {
 
 				<div className="ml-auto">
 
-					{/* 👇 SI NO hay token */}
+				
 					{!token ? (
 						<>
 							<Link to="/login">
@@ -33,7 +33,7 @@ export const Navbar = () => {
 							</Link>
 						</>
 					) : (
-						/* 👇 SI hay token */
+						
 						<>
 							<Link to="/private">
 								<button className="btn btn-warning me-2">Private</button>

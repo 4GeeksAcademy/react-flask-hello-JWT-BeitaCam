@@ -5,39 +5,39 @@ export const Home = () => {
 
 	const { store, dispatch } = useGlobalReducer();
 
-		const loadData = async () => {
-				try {
-							const backendUrl = import.meta.env.VITE_BACKEND_URL;
+	const loadData = async () => {
+		try {
+			const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-										const response = await fetch(backendUrl + "/api/users"); // 👈 cambia aquí
-													const data = await response.json();
+			const response = await fetch(backendUrl + "/api/users"); 
+			const data = await response.json();
 
-																if (response.ok) {
-																				dispatch({ type: "set_users", payload: data.users });
-																							}
+			if (response.ok) {
+				dispatch({ type: "set_users", payload: data.users });
+			}
 
-																									} catch (error) {
-																												console.log("Error conectando con backend:", error);
-																														}
-																															};
+		} catch (error) {
+			console.log("Error conectando con backend:", error);
+		}
+	};
 
-																																useEffect(() => {
-																																		loadData();
-																																			}, []);
+	useEffect(() => {
+		loadData();
+	}, []);
 
-																																				return (
-																																						<div className="text-center mt-5">
-																																									<h1>Conexión API 🚀</h1>
+	return (
+		<div className="text-center mt-5">
+			<h1>Conexión API 🚀</h1>
 
-																																												<div className="alert alert-info mt-3">
-																																																{store.users ? (
-																																																					<span>API funcionando correctamente ✅</span>
-																																																									) : (
-																																																														<span className="text-danger">
-																																																																				No conecta con el backend ❌
-																																																																									</span>
-																																																																													)}
-																																																																																</div>
-																																																																																		</div>
-																																																																																			);
-																																																																																			};
+			<div className="alert alert-info mt-3">
+				{store.users ? (
+					<span>API funcionando correctamente ✅</span>
+				) : (
+					<span className="text-danger">
+						
+					</span>
+				)}
+			</div>
+		</div>
+	);
+};

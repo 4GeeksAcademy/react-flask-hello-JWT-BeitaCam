@@ -3,12 +3,12 @@ from flask import Blueprint, jsonify, request
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from werkzeug.security import check_password_hash
 
-from api.models import User  # ✅ IMPORT CORRECTO
+from api.models import User  
 
 api = Blueprint('api', __name__)
 
 
-# 🟢 REGISTER
+
 @api.route('/register', methods=['POST'])
 def register():
     name = request.json.get('name', "")
@@ -34,7 +34,7 @@ def register():
     return jsonify({"msg": "Usuario registrado correctamente"}), 201
 
 
-# 🔐 LOGIN
+
 @api.route('/login', methods=['POST'])
 def login():
     email = request.json.get('email')
@@ -62,7 +62,7 @@ def login():
     return jsonify({"access_token": access_token}), 200
 
 
-# 👤 PROFILE
+
 @api.route('/profile', methods=['GET'])
 @jwt_required()
 def profile():
@@ -75,7 +75,7 @@ def profile():
     return jsonify({"profile": user.to_dict()}), 200
 
 
-# 📋 LIST USERS
+
 @api.route('/users', methods=['GET'])
 @jwt_required()
 def list_users():
@@ -83,7 +83,7 @@ def list_users():
     return jsonify({"users": [user.to_dict() for user in users]}), 200
 
 
-# ➕ CREATE USER
+
 @api.route('/users', methods=['POST'])
 @jwt_required()
 def add_user():
@@ -113,7 +113,7 @@ def add_user():
     }), 201
 
 
-# ✏️ UPDATE USER
+
 @api.route('/users/<int:id>', methods=['PUT'])
 @jwt_required()
 def edit_user(id):
@@ -151,7 +151,7 @@ def edit_user(id):
     }), 200
 
 
-# ❌ DELETE USER
+
 @api.route('/users/<int:id>', methods=['DELETE'])
 @jwt_required()
 def delete_user(id):
